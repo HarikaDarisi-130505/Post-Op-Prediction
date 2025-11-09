@@ -1,0 +1,9 @@
+Flask
+numpy
+joblib
+pytesseract
+pillow
+requests
+matplotlib
+scikit-learn
+gunicorn

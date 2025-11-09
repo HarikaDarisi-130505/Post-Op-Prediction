@@ -1,9 +1,10 @@
 Flask
+gunicorn
 numpy
 joblib
-pytesseract
 pillow
-requests
+pytesseract
 matplotlib
-scikit-learn
-gunicorn
+requests
+opencv-python
+

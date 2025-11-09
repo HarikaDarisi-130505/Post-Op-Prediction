@@ -108,7 +108,8 @@ def predict():
             trend_map = {'Normal': 1, 'Abnormal': 0}
             trend_value = trend_map[pred_label]
 
-            conn = sqlite3.connect('patients.db')
+            DB_PATH = os.path.join(os.path.dirname(__file__), 'patients.db')
+            conn = sqlite3.connect(DB_PATH, check_same_thread=False)
             cursor = conn.cursor()
             cursor.execute('''
                 INSERT INTO patients 

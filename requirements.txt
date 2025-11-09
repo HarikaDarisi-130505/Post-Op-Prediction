@@ -7,4 +7,5 @@ pytesseract
 matplotlib
 requests
 opencv-python
+scikit-learn
 

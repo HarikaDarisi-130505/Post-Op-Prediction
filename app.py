@@ -312,39 +312,6 @@ def get_chat():
     return jsonify({'chat_id': TELEGRAM_CHAT_ID})
 
 
-# --- OCR Endpoint ---
-@app.route('/ocr', methods=['POST'])
-def ocr_process_image():
-    if 'image' not in request.files:
-        return jsonify({'error': 'No image part in the request'}), 400
-    
-    file = request.files['image']
-    if file.filename == '':
-        return jsonify({'error': 'No selected file'}), 400
-
-    if file:
-        try:
-            image = Image.open(file.stream)
-            # You might want to pre-process the image here (e.g., grayscale, enhance contrast)
-            # image = image.convert('L') # Grayscale
-            
-            text = pytesseract.image_to_string(image)
-            # Clean up the text: remove extra newlines, leading/trailing whitespace
-            detected_text = text.strip() 
-            
-            if not detected_text:
-                return jsonify({'text': 'No readable text found.'})
-
-            return jsonify({'text': detected_text})
-        except pytesseract.TesseractNotFoundError:
-            return jsonify({'error': 'Tesseract-OCR is not installed or not in PATH.'}), 500
-        except Exception as e:
-            import traceback
-            traceback.print_exc()
-            return jsonify({'error': f"Error during OCR processing: {e}"}), 500
-    
-    return jsonify({'error': 'An unexpected error occurred.'}), 500
-
 @app.route('/patient/<phone>')
 def patient_history(phone):
     conn = sqlite3.connect('patients.db')

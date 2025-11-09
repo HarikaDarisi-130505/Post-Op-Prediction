@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Post-Op Patient Prediction</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            /* Background image with overlay - path updated */
+            background: linear-gradient(rgba(63, 43, 150, 0.7), rgba(168, 192, 255, 0.7)), url('images/recovery_background.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow-y: auto; /* Allow vertical scrolling for the body */
+            position: relative;
+            padding: 20px; /* Add some padding around the form */
+            box-sizing: border-box; /* Include padding in element's total width and height */
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.15); /* Slightly transparent white container */
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            backdrop-filter: blur(10px); /* Frosted glass effect */
+            animation: fadeIn 1s ease-out;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            margin: auto; /* Center the container with auto margins */
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+            /* Logo is static as requested */
+        }
+
+        h2 {
+            color: #fff;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            text-align: left;
+            font-size: 1.1em;
+        }
+
+        select {
+            width: calc(100% - 20px);
+            padding: 12px;
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #3f2b96;
+            font-size: 1em;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            appearance: none; /* Remove default arrow */
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%233f2b96%22%20d%3D%22M287%20197.3l-13.9-13.9a17.6%2017.6%200%200%200-24.8%200L146.2%20297.8l-102-102a17.6%2017.6%200%200%200-24.8%200L5.3%20211.2a17.6%2017.6%200%200%200%200%2024.8l128.5%20128.5a17.6%2017.6%200%200%200%2024.8%200l128.5-128.5a17.6%2017.6%200%200%200%200-24.8z%22%2F%3E%3C%2Fsvg%3E');
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 12px;
+            cursor: pointer;
+        }
+
+        select:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(63, 43, 150, 0.5); /* Focus ring */
+        }
+
+        button {
+            background-color: #f7a627; /* Bright orange button */
+            color: #3f2b96;
+            padding: 14px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            margin-top: 20px; /* Add space above the button */
+        }
+
+        button:hover {
+            background-color: #ffbf00; /* Lighter orange on hover */
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="images/logo.png" alt="Company Logo" class="logo"> <!-- Logo path updated -->
+        <h2>Post-Op Patient Prediction</h2>
+        <form method="POST">
+            <label for="L-CORE">L-CORE:</label>
+            <select name="L-CORE" id="L-CORE" required>
+                <option value="0">high</option>
+                <option value="1">low</option>
+                <option value="2">mid</option>
+            </select>
+
+            <label for="L-SURF">L-SURF:</label>
+            <select name="L-SURF" id="L-SURF" required>
+                <option value="0">high</option>
+                <option value="1">low</option>
+                <option value="2">mid</option>
+            </select>
+
+            <label for="L-O2">L-O2:</label>
+            <select name="L-O2" id="L-O2" required>
+                <option value="0">excellent</option>
+                <option value="1">good</option>
+            </select>
+
+            <label for="L-BP">L-BP:</label>
+            <select name="L-BP" id="L-BP" required>
+                <option value="0">high</option>
+                <option value="1">low</option>
+                <option value="2">mid</option>
+            </select>
+
+            <label for="SURF-STBL">SURF-STBL:</label>
+            <select name="SURF-STBL" id="SURF-STBL" required>
+                <option value="0">stable</option>
+                <option value="1">unstable</option>
+            </select>
+
+            <label for="CORE-STBL">CORE-STBL:</label>
+            <select name="CORE-STBL" id="CORE-STBL" required>
+                <option value="0">mod-stable</option>
+                <option value="1">stable</option>
+                <option value="2">unstable</option>
+            </select>
+
+            <label for="BP-STBL">BP-STBL:</label>
+            <select name="BP-STBL" id="BP-STBL" required>
+                <option value="0">mod-stable</option>
+                <option value="1">stable</option>
+                <option value="2">unstable</option>
+            </select>
+
+            <label for="COMFORT">COMFORT:</label>
+            <select name="COMFORT" id="COMFORT" required>
+                <option value="0">10</option>
+                <option value="1">15</option>
+                <option value="2">5</option>
+                <option value="3">7</option>
+                <option value="4">?</option>
+            </select>
+
+            <button type="submit">Predict</button>
+        </form>
+    </div>
+</body>
+</html>

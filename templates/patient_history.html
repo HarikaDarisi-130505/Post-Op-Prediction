@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Patient Recovery Trend</title>
+    <style>
+        body { font-family: Poppins, sans-serif; text-align:center; padding:30px; }
+        img { margin-top: 20px; border: 3px solid #3f2b96; border-radius: 10px; }
+    </style>
+</head>
+<body>
+    <h2>Recovery Chart for Patient: {{ phone }}</h2>
+    <img src="data:image/png;base64,{{ graph }}" alt="Recovery Chart">
+    <br><br>
+    <a href="/records">Back to Records</a>
+</body>
+</html>

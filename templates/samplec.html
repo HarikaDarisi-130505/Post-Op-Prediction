@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camera Test</title>
+    <style>
+        video { width: 80vw; max-width: 600px; border: 2px solid blue; display: block; margin: 20px auto; }
+        button { padding: 10px 20px; font-size: 1.2em; margin: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Camera Test Page</h1>
+    <video id="test-video" autoplay></video>
+    <button id="start-test-camera">Start Test Camera</button>
+    <button id="stop-test-camera">Stop Test Camera</button>
+    <p id="status">Status: Not started</p>
+
+    <script>
+        const testVideo = document.getElementById('test-video');
+        const startTestCameraButton = document.getElementById('start-test-camera');
+        const stopTestCameraButton = document.getElementById('stop-test-camera');
+        const statusParagraph = document.getElementById('status');
+        let testStream = null;
+
+        startTestCameraButton.addEventListener('click', async () => {
+            try {
+                testStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+                testVideo.srcObject = testStream;
+                statusParagraph.innerText = "Status: Camera active!";
+                startTestCameraButton.disabled = true;
+                stopTestCameraButton.disabled = false;
+            } catch (err) {
+                console.error("Camera access error: ", err);
+                statusParagraph.innerText = `Status: Error accessing camera: ${err.name} - ${err.message}`;
+            }
+        });
+
+        stopTestCameraButton.addEventListener('click', () => {
+            if (testStream) {
+                testStream.getTracks().forEach(track => track.stop());
+                testVideo.srcObject = null;
+                statusParagraph.innerText = "Status: Camera stopped.";
+                startTestCameraButton.disabled = false;
+                stopTestCameraButton.disabled = true;
+            }
+        });
+
+        stopTestCameraButton.disabled = true; // Initial state
+    </script>
+</body>
+</html>

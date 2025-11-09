@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Post-Op Patient Prediction</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+    /* (Original styles unchanged for brevity) */
+    </style>
+</head>
+<body>
+    <div class="main-wrapper">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Company Logo" class="logo">
+        <h2>Post-Op Patient Prediction</h2>
+
+        <div class="content-sections">
+            <div class="form-section">
+                <form method="POST">
+
+                    <!-- Added Patient Details Fields (Styled to match UI) -->
+                    <label for="name">Patient Name:</label>
+                    <input type="text" name="name" id="name" required style="width: calc(100% - 20px); padding: 12px; margin-bottom: 20px; border-radius: 8px; border: none; background-color: rgba(255, 255, 255, 0.9); color: #3f2b96; font-size: 1em;">
+
+                    <label for="age">Age:</label>
+                    <input type="number" name="age" id="age" required style="width: calc(100% - 20px); padding: 12px; margin-bottom: 20px; border-radius: 8px; border: none; background-color: rgba(255, 255, 255, 0.9); color: #3f2b96; font-size: 1em;">
+
+                    <label for="phone">Phone:</label>
+                    <input type="text" name="phone" id="phone" required style="width: calc(100% - 20px); padding: 12px; margin-bottom: 20px; border-radius: 8px; border: none; background-color: rgba(255, 255, 255, 0.9); color: #3f2b96; font-size: 1em;">
+
+                    <!-- Existing Fields Continue -->
+                    <label for="L-CORE">L-CORE:</label>
+                    <select name="L-CORE" id="L-CORE" required>
+                        <option value="0">high</option>
+                        <option value="1">low</option>
+                        <option value="2">mid</option>
+                    </select>
+
+                    <label for="L-SURF">L-SURF:</label>
+                    <select name="L-SURF" id="L-SURF" required>
+                        <option value="0">high</option>
+                        <option value="1">low</option>
+                        <option value="2">mid</option>
+                    </select>
+
+                    <label for="L-O2">L-O2:</label>
+                    <select name="L-O2" id="L-O2" required>
+                        <option value="0">excellent</option>
+                        <option value="1">good</option>
+                    </select>
+
+                    <label for="L-BP">L-BP:</label>
+                    <select name="L-BP" id="L-BP" required>
+                        <option value="0">high</option>
+                        <option value="1">low</option>
+                        <option value="2">mid</option>
+                    </select>
+
+                    <label for="SURF-STBL">SURF-STBL:</label>
+                    <select name="SURF-STBL" id="SURF-STBL" required>
+                        <option value="0">stable</option>
+                        <option value="1">unstable</option>
+                    </select>
+
+                    <label for="CORE-STBL">CORE-STBL:</label>
+                    <select name="CORE-STBL" id="CORE-STBL" required>
+                        <option value="0">mod-stable</option>
+                        <option value="1">stable</option>
+                        <option value="2">unstable</option>
+                    </select>
+
+                    <label for="BP-STBL">BP-STBL:</label>
+                    <select name="BP-STBL" id="BP-STBL" required>
+                        <option value="0">mod-stable</option>
+                        <option value="1">stable</option>
+                        <option value="2">unstable</option>
+                    </select>
+
+                    <label for="COMFORT">COMFORT:</label>
+                    <select name="COMFORT" id="COMFORT" required>
+                        <option value="0">10</option>
+                        <option value="1">15</option>
+                        <option value="2">5</option>
+                        <option value="3">7</option>
+                        <option value="4">?</option>
+                    </select>
+
+                    <button type="submit">Predict</button>
+                </form>
+            </div>
+
+            <!-- OCR section remains unchanged -->
+            <div class="ocr-section">
+                <!-- (OCR code remains as originally in your file) -->
+            </div>
+        </div>
+    </div>
+</body>
+</html>

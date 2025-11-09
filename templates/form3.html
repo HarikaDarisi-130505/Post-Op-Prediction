@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Post-Op Patient Prediction</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        input[type="text"], input[type="number"] {
+    width: calc(100% - 20px);
+    padding: 12px;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #3f2b96;
+    font-size: 1em;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+input[type="text"]:focus, input[type="number"]:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(63, 43, 150, 0.5);
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    text-align: left;
+    font-size: 1.1em;
+}
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            /* Background image with overlay - path updated */
+            background: linear-gradient(rgba(63, 43, 150, 0.7), rgba(168, 192, 255, 0.7)), url('{{ url_for('static', filename='images/recovery_background.png') }}') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow-y: auto; /* Allow vertical scrolling for the body */
+            position: relative;
+            padding: 20px; /* Add some padding around the form */
+            box-sizing: border-box; /* Include padding in element's total width and height */
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.15); /* Slightly transparent white container */
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            backdrop-filter: blur(10px); /* Frosted glass effect */
+            animation: fadeIn 1s ease-out;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            margin: auto; /* Center the container with auto margins */
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .logo {
+            width: 150px;
+            height: 80px;
+            margin-bottom: 20px;
+            /* Logo is static as requested */
+        }
+
+        h2 {
+            color: #fff;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            text-align: left;
+            font-size: 1.1em;
+        }
+
+        select {
+            width: calc(100% - 20px);
+            padding: 12px;
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #3f2b96;
+            font-size: 1em;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            appearance: none; /* Remove default arrow */
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%233f2b96%22%20d%3D%22M287%20197.3l-13.9-13.9a17.6%2017.6%200%200%200-24.8%200L146.2%20297.8l-102-102a17.6%2017.6%200%200%200-24.8%200L5.3%20211.2a17.6%2017.6%200%200%200%200%2024.8l128.5%20128.5a17.6%2017.6%200%200%200%2024.8%200l128.5-128.5a17.6%2017.6%200%200%200%200-24.8z%22%2F%3E%3C%2Fsvg%3E');
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 12px;
+            cursor: pointer;
+        }
+
+        select:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(63, 43, 150, 0.5); /* Focus ring */
+        }
+
+        button {
+            background-color: #f7a627; /* Bright orange button */
+            color: #3f2b96;
+            padding: 14px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            margin-top: 20px; /* Add space above the button */
+        }
+
+        button:hover {
+            background-color: #ffbf00; /* Lighter orange on hover */
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Company Logo" class="logo"> <!-- Logo path updated -->
+        <h2>Post-Op Patient Prediction</h2>
+        <div style="text-align:right; margin-bottom:15px;">
+    <a href="/records" style="background:#3f2b96; color:#fff; padding:8px 14px; border-radius:6px; text-decoration:none; font-weight:600;">
+        📋 View Patient Records
+    </a>
+</div>
+
+        <form method="POST">
+           <div class="input-group">
+    <label for="name">Patient Name:</label>
+    <input type="text" name="name" id="name" required>
+</div>
+
+<div class="input-group">
+    <label for="age">Age:</label>
+    <input type="number" name="age" id="age" required>
+</div>
+
+<div class="input-group">
+    <label for="phone">Phone:</label>
+    <input type="text" name="phone" id="phone" required>
+</div>
+
+            <label for="L-CORE">L-CORE:</label>
+            <select name="L-CORE" id="L-CORE" required>
+                <option value="0">high</option>
+                <option value="1">low</option>
+                <option value="2">mid</option>
+            </select>
+
+            <label for="L-SURF">L-SURF:</label>
+            <select name="L-SURF" id="L-SURF" required>
+                <option value="0">high</option>
+                <option value="1">low</option>
+                <option value="2">mid</option>
+            </select>
+
+            <label for="L-O2">L-O2:</label>
+            <select name="L-O2" id="L-O2" required>
+                <option value="0">excellent</option>
+                <option value="1">good</option>
+            </select>
+
+            <label for="L-BP">L-BP:</label>
+            <select name="L-BP" id="L-BP" required>
+                <option value="0">high</option>
+                <option value="1">low</option>
+                <option value="2">mid</option>
+            </select>
+
+            <label for="SURF-STBL">SURF-STBL:</label>
+            <select name="SURF-STBL" id="SURF-STBL" required>
+                <option value="0">stable</option>
+                <option value="1">unstable</option>
+            </select>
+
+            <label for="CORE-STBL">CORE-STBL:</label>
+            <select name="CORE-STBL" id="CORE-STBL" required>
+                <option value="0">mod-stable</option>
+                <option value="1">stable</option>
+                <option value="2">unstable</option>
+            </select>
+
+            <label for="BP-STBL">BP-STBL:</label>
+            <select name="BP-STBL" id="BP-STBL" required>
+                <option value="0">mod-stable</option>
+                <option value="1">stable</option>
+                <option value="2">unstable</option>
+            </select>
+
+            <label for="COMFORT">COMFORT:</label>
+            <select name="COMFORT" id="COMFORT" required>
+                <option value="0">10</option>
+                <option value="1">15</option>
+                <option value="2">5</option>
+                <option value="3">7</option>
+                <option value="4">?</option>
+            </select>
+
+            <button type="submit">Predict</button>
+        </form>
+    </div>
+        <div class="ocr-box" style="
+        background: rgba(255, 255, 255, 0.15);
+        padding: 20px;
+        border-radius: 15px;
+        margin-top: 20px;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+        
+        <h3 style="color: #fff; margin-bottom: 15px;">Data Input Methods</h3>
+
+        <!-- File Upload Section -->
+        <div style="margin-bottom: 20px; padding: 15px; background: rgba(255,255,255,0.1); border-radius: 8px;">
+            <h4 style="color: #fff; margin-bottom: 10px;">1. Upload Text File</h4>
+            <input type="file" id="fileInput" accept=".txt" onchange="handleFileUpload(event)" style="
+                color: #fff;
+                background: rgba(255,255,255,0.1);
+                padding: 8px;
+                border-radius: 4px;
+                border: 1px solid rgba(255,255,255,0.3);
+                width: 100%;
+                margin-bottom: 10px;
+                cursor: pointer;
+            ">
+            <div id="fileName" style="color: #fff; margin-top: 5px; font-size: 0.9em;"></div>
+        </div>
+
+        <!-- Camera Section -->
+        <div style="margin-top: 20px;">
+            <h4 style="color: #fff; margin-bottom: 10px;">2. OCR Camera Input</h4>
+            <div style="position: relative; width: 280px; height: 200px; margin: 0 auto; background: #000; border-radius: 8px; overflow: hidden;">
+                <video id="camera" width="280" height="200" autoplay style="object-fit: cover;"></video>
+            </div>
+        </div>        <div style="margin: 15px 0;">
+            <button type="button" onclick="startCamera()" style="background: #4CAF50; margin-right: 10px;">Start Camera</button>
+            <button type="button" onclick="stopCamera()" style="background: #f44336; margin-right: 10px;">Stop Camera</button>
+            <button type="button" onclick="captureImage()" style="background: #2196F3; margin-right:8px;">Capture & OCR</button>
+            <button type="button" onclick="sendManualAlert()" style="background: #9b59b6;">Send Alert</button>
+        </div>
+
+        <p><strong style="color: #fff;">Detected Text:</strong></p>
+        <textarea id="ocr-text" style="
+            width: 100%;
+            height: 90px;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            background: rgba(255, 255, 255, 0.9);
+            margin-top: 10px;
+            resize: vertical;"></textarea>
+        <div style="margin-top:10px;">
+            <label for="custom-message" style="color:#fff; display:block; text-align:left; margin-bottom:6px;">Custom Alert Message (optional)</label>
+            <textarea id="custom-message" placeholder="Type a custom Telegram message to send (optional)" style="width:100%; height:70px; padding:8px; border-radius:6px; border:none; resize:vertical;"></textarea>
+        </div>
+        
+        <div id="error-message" style="color: #ff6b6b; margin-top: 10px; display: none;"></div>
+    </div>
+
+    <script>
+    let stream = null;
+
+    function showError(message) {
+        const errorDiv = document.getElementById('error-message');
+        errorDiv.textContent = message;
+        errorDiv.style.display = 'block';
+        setTimeout(() => {
+            errorDiv.style.display = 'none';
+        }, 5000);
+    }
+
+    async function startCamera() {
+        try {
+            stream = await navigator.mediaDevices.getUserMedia({ 
+                video: { 
+                    facingMode: 'environment',
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 }
+                } 
+            });
+            const video = document.getElementById("camera");
+            video.srcObject = stream;
+            video.play();
+        } catch (err) {
+            showError(`Camera error: ${err.message}`);
+            console.error('Camera error:', err);
+        }
+    }
+
+    function stopCamera() {
+        if (stream) {
+            stream.getTracks().forEach(track => track.stop());
+            stream = null;
+        }
+        const video = document.getElementById("camera");
+        video.srcObject = null;
+    }
+
+    function captureImage() {
+        if (!stream) {
+            showError('Please start the camera first');
+            return;
+        }
+
+        const video = document.getElementById("camera");
+        const canvas = document.createElement("canvas");
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        
+        try {
+            canvas.getContext("2d").drawImage(video, 0, 0);
+            canvas.toBlob((blob) => {
+                const formData = new FormData();
+                formData.append("image", blob, "capture.png");
+
+                fetch("/ocr", { 
+                    method: "POST", 
+                    body: formData 
+                })
+                .then(res => {
+                    if (!res.ok) throw new Error('OCR processing failed');
+                    return res.json();
+                })
+                .then(data => {
+                    if (data.error) throw new Error(data.error);
+                    const text = data.text || "";
+                    document.getElementById("ocr-text").value = text;
+                    autoFillFields(text);
+                })
+                .catch(err => {
+                    showError(`OCR error: ${err.message}`);
+                    console.error('OCR error:', err);
+                });
+            }, 'image/jpeg', 0.95);
+        } catch (err) {
+            showError(`Capture error: ${err.message}`);
+            console.error('Capture error:', err);
+        }
+    }
+
+    function autoFillFields(text) {
+        try {
+            text = text.toLowerCase();
+            
+            // Extract patient name
+            const nameMatch = text.match(/patient:?\s*([a-zA-Z\s]+)/i);
+            if (nameMatch && nameMatch[1]) {
+                document.querySelector("[name='name']").value = nameMatch[1].trim();
+            }
+
+            // Extract temperature/core (assuming this might contain patient data)
+            const tempMatch = text.match(/temperature:?\s*(\d+)/i);
+            if (tempMatch && tempMatch[1]) {
+                document.querySelector("[name='age']").value = tempMatch[1].trim();
+            }
+
+            // L-CORE
+            if (text.includes("high core") || text.includes("high temp")) document.querySelector("[name='L-CORE']").value = "0";
+            else if (text.includes("low core")) document.querySelector("[name='L-CORE']").value = "1";
+            else if (text.includes("mid core")) document.querySelector("[name='L-CORE']").value = "2";
+
+            // L-SURF
+            if (text.includes("high surf")) document.querySelector("[name='L-SURF']").value = "0";
+            else if (text.includes("low surf")) document.querySelector("[name='L-SURF']").value = "1";
+            else if (text.includes("mid surf")) document.querySelector("[name='L-SURF']").value = "2";
+
+            // O2
+            if (text.includes("excellent oxygen")) document.querySelector("[name='L-O2']").value = "0";
+            else if (text.includes("good oxygen")) document.querySelector("[name='L-O2']").value = "1";
+
+            // BP
+            if (text.includes("high bp")) document.querySelector("[name='L-BP']").value = "0";
+            else if (text.includes("low bp")) document.querySelector("[name='L-BP']").value = "1";
+            else if (text.includes("mid bp")) document.querySelector("[name='L-BP']").value = "2";
+
+            // SURF-STBL
+            if (text.includes("stable surf")) document.querySelector("[name='SURF-STBL']").value = "0";
+            if (text.includes("unstable surf")) document.querySelector("[name='SURF-STBL']").value = "1";
+
+            // CORE-STBL
+            if (text.includes("mod-stable core")) document.querySelector("[name='CORE-STBL']").value = "0";
+            else if (text.includes("stable core")) document.querySelector("[name='CORE-STBL']").value = "1";
+            else if (text.includes("unstable core")) document.querySelector("[name='CORE-STBL']").value = "2";
+
+            // BP-STBL
+            if (text.includes("mod-stable bp")) document.querySelector("[name='BP-STBL']").value = "0";
+            else if (text.includes("stable bp")) document.querySelector("[name='BP-STBL']").value = "1";
+            else if (text.includes("unstable bp")) document.querySelector("[name='BP-STBL']").value = "2";
+
+            // Comfort
+            if (text.includes("comfort 10")) document.querySelector("[name='COMFORT']").value = "0";
+            else if (text.includes("comfort 15")) document.querySelector("[name='COMFORT']").value = "1";
+            else if (text.includes("comfort 5")) document.querySelector("[name='COMFORT']").value = "2";
+            else if (text.includes("comfort 7")) document.querySelector("[name='COMFORT']").value = "3";
+            else if (text.includes("comfort ?")) document.querySelector("[name='COMFORT']").value = "4";
+            // After auto-fill attempt, submit the form normally (POST to '/')
+            // Small delay to ensure UI updates
+            setTimeout(() => {
+                submitNormally();
+            }, 600);
+        } catch (err) {
+            showError(`Auto-fill error: ${err.message}`);
+            console.error('Auto-fill error:', err);
+        }
+    }
+
+    function submitPrediction() {
+        try {
+            const form = document.querySelector('form');
+            const name = form.querySelector('[name="name"]').value.trim();
+            const age = form.querySelector('[name="age"]').value.trim();
+            const phone = form.querySelector('[name="phone"]').value.trim();
+
+            if (!name || !age || !phone) {
+                showError('Please fill Patient Name, Age and Phone before auto-submitting.');
+                return;
+            }
+
+            const formData = new FormData(form);
+            // Send to the AJAX endpoint
+            fetch('/predict_ajax', {
+                method: 'POST',
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.error) {
+                    showError('Server error: ' + data.error);
+                    return;
+                }
+
+                // Show an alert when telegram message has been sent
+                if (data.telegram_sent) {
+                    // Show a visible alert and also a small inline message
+                    alert('Telegram notification sent successfully!');
+                    const e = document.createElement('div');
+                    e.textContent = 'Telegram notification sent successfully!';
+                    e.style = 'background:#2ecc71;color:#fff;padding:8px;border-radius:6px;margin-top:8px;text-align:center;';
+                    document.querySelector('.ocr-box').appendChild(e);
+                    setTimeout(()=> e.remove(), 5000);
+                } else {
+                    // If prediction didn't require telegram or sending failed, show status
+                    if (data.prediction) {
+                        const msg = `Prediction: ${data.prediction} — Telegram sent: ${data.telegram_sent}`;
+                        const e = document.createElement('div');
+                        e.textContent = msg;
+                        e.style = 'background:#3498db;color:#fff;padding:8px;border-radius:6px;margin-top:8px;text-align:center;';
+                        document.querySelector('.ocr-box').appendChild(e);
+                        setTimeout(()=> e.remove(), 5000);
+                    }
+                }
+            })
+            .catch(err => {
+                showError('Submission error: ' + err.message);
+                console.error('Submission error:', err);
+            });
+        } catch (err) {
+            showError('Unexpected submit error: ' + err.message);
+            console.error(err);
+        }
+    }
+
+    // Submit the form normally (non-AJAX) so server's '/' route handles prediction and Telegram
+    function submitNormally() {
+        try {
+            const form = document.querySelector('form');
+            const name = form.querySelector('[name="name"]').value.trim();
+            const age = form.querySelector('[name="age"]').value.trim();
+            const phone = form.querySelector('[name="phone"]').value.trim();
+
+            if (!name || !age || !phone) {
+                showError('Please fill Patient Name, Age and Phone before submitting.');
+                return;
+            }
+
+            // Submit the form normally to the server (will navigate to result page)
+            form.submit();
+        } catch (err) {
+            showError('Unexpected submit error: ' + err.message);
+            console.error(err);
+        }
+    }
+
+    // Manual send alert for testing Telegram without running prediction
+    function sendManualAlert() {
+        try {
+            const name = document.querySelector('[name="name"]').value.trim();
+            const phone = document.querySelector('[name="phone"]').value.trim();
+            const custom = document.getElementById('custom-message').value.trim();
+
+            if (!name || !phone) {
+                showError('Please enter Patient Name and Phone to send a manual alert.');
+                return;
+            }
+
+            const data = new FormData();
+            data.append('name', name);
+            data.append('phone', phone);
+            if (custom) data.append('message', custom);
+
+            fetch('/send_alert', { method: 'POST', body: data })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.error) {
+                        showError('Alert error: ' + data.error);
+                        return;
+                    }
+                    if (data.telegram_sent) {
+                        alert('Telegram notification sent successfully!');
+                    } else {
+                        showError('Telegram notification was not sent (check bot token/chat id and network).');
+                    }
+                })
+                .catch(err => {
+                    showError('Network error sending alert: ' + err.message);
+                    console.error('Manual alert error:', err);
+                });
+        } catch (err) {
+            showError('Unexpected manual alert error: ' + err.message);
+            console.error(err);
+        }
+    }
+
+    // Handle file input change (reads .txt files, parses and autofills form)
+    function handleFileUpload(event) {
+        const file = event.target.files && event.target.files[0];
+        if (!file) {
+            showError('No file selected');
+            return;
+        }
+
+        // Update filename display (if present)
+        const fileNameEl = document.getElementById('fileName');
+        if (fileNameEl) fileNameEl.textContent = file.name;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const text = e.target.result || '';
+            try {
+                // show in textarea
+                const ta = document.getElementById('ocr-text');
+                if (ta) ta.value = text;
+
+                // parse lines and fill fields
+                const lines = text.split(/\r?\n/).map(l => l.trim()).filter(l => l.length);
+                lines.forEach(line => {
+                    const l = line.toLowerCase();
+                    // Patient:
+                    const mName = line.match(/patient:\s*(.+)/i);
+                    if (mName) document.querySelector('[name="name"]').value = mName[1].trim();
+
+                    const mTemp = line.match(/temperature:\s*(\d+)/i);
+                    if (mTemp) document.querySelector('[name="age"]').value = mTemp[1].trim();
+
+                    if (l.includes('high core')) document.querySelector('[name="L-CORE"]').value = '0';
+                    else if (l.includes('low core')) document.querySelector('[name="L-CORE"]').value = '1';
+                    else if (l.includes('mid core')) document.querySelector('[name="L-CORE"]').value = '2';
+
+                    if (l.includes('high surf')) document.querySelector('[name="L-SURF"]').value = '0';
+                    else if (l.includes('low surf')) document.querySelector('[name="L-SURF"]').value = '1';
+                    else if (l.includes('mid surf')) document.querySelector('[name="L-SURF"]').value = '2';
+
+                    if (l.includes('excellent oxygen')) document.querySelector('[name="L-O2"]').value = '0';
+                    else if (l.includes('good oxygen')) document.querySelector('[name="L-O2"]').value = '1';
+
+                    if (l.includes('high bp')) document.querySelector('[name="L-BP"]').value = '0';
+                    else if (l.includes('low bp')) document.querySelector('[name="L-BP"]').value = '1';
+                    else if (l.includes('mid bp')) document.querySelector('[name="L-BP"]').value = '2';
+
+                    if (l.includes('unstable surf')) document.querySelector('[name="SURF-STBL"]').value = '1';
+                    else if (l.includes('stable surf')) document.querySelector('[name="SURF-STBL"]').value = '0';
+
+                    if (l.includes('unstable core')) document.querySelector('[name="CORE-STBL"]').value = '2';
+                    else if (l.includes('stable core')) document.querySelector('[name="CORE-STBL"]').value = '1';
+                    else if (l.includes('mod-stable core')) document.querySelector('[name="CORE-STBL"]').value = '0';
+
+                    if (l.includes('unstable bp')) document.querySelector('[name="BP-STBL"]').value = '2';
+                    else if (l.includes('stable bp')) document.querySelector('[name="BP-STBL"]').value = '1';
+                    else if (l.includes('mod-stable bp')) document.querySelector('[name="BP-STBL"]').value = '0';
+
+                    if (l.includes('comfort 10')) document.querySelector('[name="COMFORT"]').value = '0';
+                    else if (l.includes('comfort 15')) document.querySelector('[name="COMFORT"]').value = '1';
+                    else if (l.includes('comfort 5')) document.querySelector('[name="COMFORT"]').value = '2';
+                    else if (l.includes('comfort 7')) document.querySelector('[name="COMFORT"]').value = '3';
+                    else if (l.includes('comfort ?')) document.querySelector('[name="COMFORT"]').value = '4';
+                });
+
+                // Try to auto-extract a phone number (first sequence of 7-15 digits, allowing spaces/dashes)
+                try {
+                    const phoneRegex = /(\+?\d[\d\-\s]{5,20}\d)/;
+                    const phoneMatch = text.match(phoneRegex);
+                    if (phoneMatch) {
+                        const cleaned = phoneMatch[0].replace(/\D/g, '');
+                        if (cleaned.length >= 7) {
+                            document.querySelector('[name="phone"]').value = cleaned;
+                        }
+                    }
+                } catch (e) {
+                    console.warn('phone extraction error', e);
+                }
+                showError('File parsed and fields filled (phone auto-filled if found).');
+
+                // attempt auto-submit only if required fields present
+                setTimeout(() => {
+                    const form = document.querySelector('form');
+                    const name = form.querySelector('[name="name"]').value.trim();
+                    const age = form.querySelector('[name="age"]').value.trim();
+                    const phone = form.querySelector('[name="phone"]').value.trim();
+                    if (name && age && phone) form.submit();
+                }, 700);
+
+            } catch (err) {
+                console.error('handleFileUpload error:', err);
+                showError('Error processing file: ' + err.message);
+            }
+        };
+        reader.onerror = function(err) {
+            console.error('FileReader error', err);
+            showError('Error reading file');
+        };
+        reader.readAsText(file);
+    }
+</script>
+
+</body>
+</html>

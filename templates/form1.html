@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Post-Op Patient Prediction</title>
+</head>
+<body>
+    <h2>Enter Patient Post-Op Details</h2>
+    <form method="POST">
+        {% for feature in features %}
+        <label>{{ feature }} (Enter numerical code):</label><br>
+        <input type="text" name="{{ feature }}" required><br><br>
+        {% endfor %}
+        <button type="submit">Predict</button>
+    </form>
+</body>
+</html>

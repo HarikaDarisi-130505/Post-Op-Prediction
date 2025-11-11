@@ -1,11 +1,10 @@
-Post-Operative Patient Recovery Prediction System
+**Post-Operative Patient Recovery Prediction System**
 
 This project is a **web-based healthcare monitoring system** that predicts a **patient’s recovery status** after surgery as **Stable**, **Observe**, or **Critical** using a **Machine Learning model**.
 It also provides **OCR-based automatic data extraction** and sends **alerts to doctors** through **Telegram** in case of critical conditions.
 
 ---
 🔗 **Live Demo:** https://post-op-prediction.onrender.com/
-
 ### ⭐ **Features**
 
 * ✔️ Predict patient recovery condition using **Random Forest Classifier**
